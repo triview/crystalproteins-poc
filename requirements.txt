@@ -1,0 +1,15 @@
+# tested with these versions (Python 3.13); older patch releases are likely fine
+pydicom>=3.0.2
+nibabel>=5.4.2
+numpy>=2.0
+scipy>=1.13
+scikit-image>=0.24
+trimesh>=4.4
+fast-simplification>=0.1.9
+# tests
+pytest>=8
+playwright>=1.45        # then: python -m playwright install chromium
+# compressed DICOM from hospital CDs (JPEG / JPEG 2000):
+# pylibjpeg pylibjpeg-libjpeg pylibjpeg-openjpeg
+# segmentation (optional, large: pulls in PyTorch):
+# TotalSegmentator

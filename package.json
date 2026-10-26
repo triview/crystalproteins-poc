@@ -1,0 +1,15 @@
+{
+  "name": "crystalproteins-poc",
+  "private": true,
+  "description": "POC: replacement 3D preview viewer and file ingester/processor for laser-etched glass",
+  "scripts": {
+    "build": "python3 build_viewer.py",
+    "test": "cd tests && python3 -m pytest -q",
+    "test:fast": "cd tests && python3 -m pytest -q test_ct2mesh.py",
+    "agents": "node scripts/agent-sync.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "0.24.0",
+    "three": "0.160.0"
+  }
+}

@@ -1,0 +1,226 @@
+<title>Crystal Etch Preview</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600&family=Barlow:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: full-height split. The crystal viewport is the stage; a narrow instrument panel on the
+   right holds controls in workflow order (model → block → display → dots → export). Stacks
+   viewport-over-panel on phones. Committed single dark look: the subject is light inside clear
+   glass, so the stage is always black. */
+:root {
+  color-scheme: dark;
+  --ink: #04070a;          /* stage: black behind glass */
+  --panel: #0b1116;        /* instrument panel */
+  --rule: #1c2830;         /* hairlines, slider tracks */
+  --fg: #dfe8ea;           /* primary text */
+  --muted: #7f9399;        /* labels, units */
+  --edge: #6fc2b4;         /* accent: the green of a cut glass edge */
+  --warn: #e3a857;         /* open meshes, risky spacing */
+  --font-ui: "Barlow Semi Condensed", "Arial Narrow", system-ui, sans-serif;
+  --font-body: "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-data: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+[hidden] { display: none !important; }
+html, body { height: 100%; }
+body { margin: 0; background: var(--ink); color: var(--fg); font: 14px/1.45 var(--font-body); overflow: hidden; }
+.app { display: flex; height: 100%; min-height: 0; }
+.stage { position: relative; flex: 1 1 auto; min-width: 0; }
+#gl { display: block; width: 100%; height: 100%; touch-action: none; }
+.panel {
+  flex: 0 0 340px; background: var(--panel); border-left: 1px solid var(--rule);
+  overflow-y: auto; padding-block: 18px 28px;
+  padding-left: 18px; padding-right: max(18px, env(safe-area-inset-right, 0px));
+  display: flex; flex-direction: column; gap: 22px;
+}
+h1 { margin: 0; font: 600 20px/1.1 var(--font-ui); letter-spacing: .01em; text-wrap: balance; }
+.sub { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
+section { display: flex; flex-direction: column; gap: 10px; }
+section > h2 {
+  margin: 0; font: 600 11px/1 var(--font-ui); text-transform: uppercase; letter-spacing: .14em;
+  color: var(--edge); padding-bottom: 7px; border-bottom: 1px solid var(--rule);
+}
+.row { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 8px; }
+.row label, .lbl { font: 500 13px/1.2 var(--font-ui); color: var(--fg); }
+.val { font: 500 12px/1 var(--font-data); color: var(--fg); font-variant-numeric: tabular-nums; }
+.unit { color: var(--muted); }
+.hint { margin: 0; color: var(--muted); font-size: 12.5px; }
+input[type=range] { width: 100%; accent-color: var(--edge); margin: 2px 0 0; }
+.dims { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.dims label { display: flex; flex-direction: column; gap: 3px; font: 500 11px/1 var(--font-ui);
+  color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+input[type=number] {
+  width: 100%; box-sizing: border-box; background: var(--ink); color: var(--fg);
+  border: 1px solid var(--rule); border-radius: 3px; padding: 6px;
+  font: 500 13px/1 var(--font-data); font-variant-numeric: tabular-nums;
+}
+input:focus-visible, button:focus-visible, .drop:focus-visible { outline: 2px solid var(--edge); outline-offset: 1px; }
+button {
+  font: 600 13px/1 var(--font-ui); letter-spacing: .02em; color: var(--fg); cursor: pointer;
+  background: transparent; border: 1px solid var(--rule); border-radius: 3px; padding: 8px 10px;
+}
+button:hover { border-color: var(--edge); }
+button.primary { background: var(--edge); color: var(--ink); border-color: var(--edge); }
+button.primary:hover { filter: brightness(1.08); }
+button[aria-pressed=true] { border-color: var(--edge); color: var(--edge); }
+.btns { display: flex; flex-wrap: wrap; gap: 6px; }
+.seg { display: grid; grid-template-columns: repeat(3, 1fr); }
+.seg button { border-radius: 0; margin-left: -1px; }
+.seg button:first-child { border-radius: 3px 0 0 3px; margin-left: 0; }
+.seg button:last-child { border-radius: 0 3px 3px 0; }
+.seg button[aria-pressed=true] { background: var(--edge); color: var(--ink); position: relative; z-index: 1; }
+.budget { display: grid; grid-template-columns: 1fr auto; gap: 6px; }
+.drop {
+  border: 1px dashed var(--rule); border-radius: 4px; padding: 12px; text-align: center;
+  color: var(--muted); font-size: 12.5px; cursor: pointer;
+}
+.drop:hover, .drop.over { border-color: var(--edge); color: var(--fg); }
+.drop b { color: var(--fg); font-weight: 500; }
+.src { font: 400 12px/1.5 var(--font-data); color: var(--muted); word-break: break-all; }
+.layers { display: flex; flex-direction: column; gap: 12px; }
+.layer { display: grid; grid-template-columns: auto 1fr auto; gap: 3px 8px; align-items: center; }
+.layer input[type=checkbox] { accent-color: var(--edge); margin: 0; }
+.layer .meta { grid-column: 2 / -1; font: 400 11.5px/1.3 var(--font-data); color: var(--muted); }
+.layer .meta .bad { color: var(--warn); }
+.layer input[type=range] { grid-column: 1 / -1; }
+.swatch { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; vertical-align: 1px; }
+
+.hud { position: absolute; left: max(14px, env(safe-area-inset-left, 0px)); top: 14px;
+  display: flex; flex-direction: column; gap: 2px; pointer-events: none; }
+.hud .big { font: 500 30px/1 var(--font-data); font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
+.hud .big small { font: 600 11px/1 var(--font-ui); letter-spacing: .14em; color: var(--muted); text-transform: uppercase; margin-left: 6px; }
+.hud .line { font: 400 12px/1.5 var(--font-data); color: var(--muted); font-variant-numeric: tabular-nums; }
+.hud .warn { color: var(--warn); }
+.views { position: absolute; right: 12px; bottom: 12px; display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end; }
+.views button { background: var(--panel); padding: 6px 9px; font-size: 12px; }
+.toast { position: absolute; left: 50%; bottom: 54px; transform: translateX(-50%);
+  background: var(--panel); border: 1px solid var(--rule); border-radius: 4px; padding: 8px 12px;
+  font-size: 13px; max-width: calc(100% - 32px); }
+.busy { position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); padding: 24px;
+  text-align: center; font: 500 13px var(--font-ui); letter-spacing: .1em; text-transform: uppercase; pointer-events: none; }
+
+.busy.err { text-transform: none; letter-spacing: 0; color: var(--warn); font: 500 14px/1.5 var(--font-body); }
+
+@media (max-width: 760px) {
+  body { overflow: auto; }
+  .app { flex-direction: column; height: auto; }
+  .stage { height: 62vh; min-height: 320px; flex: none; }
+  .panel { flex: none; border-left: 0; border-top: 1px solid var(--rule); overflow: visible;
+    padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+}
+</style>
+
+<div class="app">
+  <div class="stage" id="stage">
+    <canvas id="gl" aria-label="3D preview of the model inside the crystal block"></canvas>
+    <div class="hud" aria-live="polite">
+      <div class="big"><span id="hudCount">0</span><small id="hudUnit">triangles</small></div>
+      <div class="line" id="hudA"></div>
+      <div class="line" id="hudB"></div>
+      <div class="line" id="hudC"></div>
+      <div class="line warn" id="hudWarn" hidden></div>
+    </div>
+    <div class="views" role="group" aria-label="Camera">
+      <button id="vFront" type="button">Front</button>
+      <button id="vSide" type="button">Side</button>
+      <button id="vTop" type="button">Top</button>
+      <button id="vIso" type="button">3/4</button>
+      <button id="vSpin" type="button" aria-pressed="false">Spin</button>
+    </div>
+    <div class="busy" id="busy">Starting the viewer…</div>
+    <div class="toast" id="toast" role="status" hidden></div>
+  </div>
+
+  <aside class="panel">
+    <header>
+      <h1>Crystal Etch Preview</h1>
+      <p class="sub">Check CT-derived meshes inside the glass block before you generate dots. Distances are millimetres of glass.</p>
+    </header>
+
+    <section aria-labelledby="h-src">
+      <h2 id="h-src">Model</h2>
+      <label class="drop" id="drop" for="file" tabindex="0">
+        <b>Drop STL files here</b>, click to choose, or paste a copied file<br>Each STL becomes a layer · GLB, OBJ and PLY work too
+      </label>
+      <input id="file" type="file" accept=".stl,.glb,.gltf,.obj,.ply,model/stl,application/sla,application/vnd.ms-pki.stl" multiple hidden>
+      <div class="btns">
+        <button id="openFiles" type="button" class="primary">Open STL files…</button>
+        <button id="loadSample" type="button">Reload sample chest</button>
+      </div>
+      <div class="row"><span class="lbl" id="upLbl">Up axis of the file</span>
+        <div class="seg" role="group" aria-labelledby="upLbl" style="grid-template-columns:repeat(2,52px)">
+          <button id="upZ" type="button" aria-pressed="true">Z</button>
+          <button id="upY" type="button" aria-pressed="false">Y</button>
+        </div></div>
+      <div class="src" id="srcInfo">—</div>
+      <div class="layers" id="layers"></div>
+    </section>
+
+    <section aria-labelledby="h-cube">
+      <h2 id="h-cube">Crystal block</h2>
+      <div class="dims">
+        <label for="cx">Width<input id="cx" type="number" min="5" max="400" step="1" value="50"></label>
+        <label for="cy">Depth<input id="cy" type="number" min="5" max="400" step="1" value="50"></label>
+        <label for="cz">Height<input id="cz" type="number" min="5" max="400" step="1" value="80"></label>
+        <label for="cm">Margin<input id="cm" type="number" min="0" max="50" step="0.5" value="4"></label>
+      </div>
+      <p class="hint">The model is scaled uniformly to fill the block inside the margin, and centred.</p>
+    </section>
+
+    <section aria-labelledby="h-look">
+      <h2 id="h-look">Display</h2>
+      <div class="seg" role="group" aria-label="Display mode">
+        <button id="mGlass" type="button" aria-pressed="true">Glass</button>
+        <button id="mSolid" type="button" aria-pressed="false">Solid</button>
+        <button id="mDots" type="button" aria-pressed="false">Dots</button>
+      </div>
+      <div class="btns">
+        <button id="tint" type="button" aria-pressed="true">Layer colours</button>
+        <button id="showBox" type="button" aria-pressed="true">Block outline</button>
+      </div>
+    </section>
+
+    <section aria-labelledby="h-dens" id="dotsPanel" hidden>
+      <h2 id="h-dens">Dot preview</h2>
+      <p class="hint">A rough stand-in for your own point generator: surfaces are sampled evenly, then thinned so no two dots are closer than the spacing below. The slider under each layer sets its relative density: at 0.25 a layer gets about a quarter of the dots, so an outer shell can stay faint.</p>
+      <div>
+        <div class="row"><label for="spacing">Minimum dot spacing</label>
+          <span class="val"><span id="spacingVal">0.20</span> <span class="unit">mm</span></span></div>
+        <input id="spacing" type="range" min="0.08" max="1.5" step="0.01" value="0.2">
+      </div>
+      <div>
+        <span class="lbl">Fit to a dot budget</span>
+        <div class="budget">
+          <input id="budget" type="number" min="1000" step="1000" value="80000" aria-label="Dot budget">
+          <button id="fitBudget" type="button">Set spacing</button>
+        </div>
+      </div>
+      <div>
+        <div class="row"><label for="dot">Dot size on screen</label>
+          <span class="val"><span id="dotVal">1.0</span><span class="unit">×</span></span></div>
+        <input id="dot" type="range" min="0.3" max="3" step="0.1" value="1">
+      </div>
+      <div class="row"><label for="rate">Engraver speed</label>
+        <span class="val" style="display:flex;align-items:center;gap:6px">
+          <input id="rate" type="number" min="100" step="100" value="1000" style="width:84px"> <span class="unit">dots/s</span></span></div>
+    </section>
+
+    <section aria-labelledby="h-exp">
+      <h2 id="h-exp">Export</h2>
+      <p class="hint" id="expHint">Saves each visible layer as an STL, scaled and positioned for the block, plus a settings file, in one zip.</p>
+      <div class="btns"><button id="export" class="primary" type="button">Export block-fitted files</button></div>
+    </section>
+  </aside>
+</div>
+
+<script type="application/json" id="sampleData"></script>
+<script>
+/* Startup guard: show any error instead of hanging on "Starting…". */
+(function () {
+  function show(msg) { var b = document.getElementById("busy"); if (b) { b.hidden = false; b.className = "busy err"; b.textContent = String(msg).replace(/^(The viewer hit an error: )Uncaught (Error: )?/, "$1"); } }
+  window.addEventListener("error", function (e) { if (!window.__etchReady) show("The viewer hit an error: " + (e.message || e.error || "unknown")); });
+  window.addEventListener("unhandledrejection", function (e) { if (!window.__etchReady) show("The viewer hit an error: " + ((e.reason && e.reason.message) || e.reason)); });
+  setTimeout(function () { if (!window.__etch) show("The 3D viewer didn't start in this browser. Try reloading the page; if it persists, check that WebGL / hardware acceleration is on."); }, 12000);
+})();
+</script>
+<script>/*APP_BUNDLE*/</script>
+
