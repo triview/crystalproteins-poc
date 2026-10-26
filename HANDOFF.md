@@ -18,6 +18,7 @@ Read this first. It replaces re-reading any earlier chat.
 
 ## Open items (newest first)
 
+- **Planned for iteration 2:** block shapes (rectangular presets, corner cube, round/curved, faceted), reorienting/resizing/moving the model, and text blocks (multi-line, fonts incl. upload, flat or extruded) — scope and owner questions in `docs/design/block-placement-text.md`. Iteration 1 writes `docs/prompts/iteration-2.md` from it.
 - **Deploy on Cloudflare, documented but not executed:** `docs/operations/deploy-cloudflare.md` (viewer as an assets-only Worker behind Cloudflare Access; the ingester stays off the server for now). Needs the owner's Cloudflare login for the first run.
 - **Queued, not started:** DICOM zip import in the viewer (in-browser, scan never leaves the customer's machine) — `docs/backlog/dicom-zip-import.md`. Waits for the owner's go.
 - **Iteration 1 is next:** `docs/prompts/iteration-1.md` (ingester restructure + viewer parity with the current crystalproteins.com previews).
