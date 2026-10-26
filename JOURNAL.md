@@ -6,6 +6,20 @@ This file exists because the *reasoning* behind a decision is not reconstructabl
 
 ---
 
+## 2026-10-26 (afternoon, later) — DICOM zip import queued, not built
+
+**Asked by the owner:** "sounds like it might be easier for the app to accept a dicom zip file" … "that's fine. i'm still learning the process. let's push to later. leave the dicom.zip file processing a process to be completed"
+
+**Decided (owner):** the viewer should eventually take a DICOM zip directly; not now.
+
+**Decided (session, proposed and not objected to):** when it is built, the conversion runs in the browser (privacy, no upload limit, no server), density layers first, TotalSegmentator stays an external step, uncompressed DICOM first. Scope, checks and tests are in `docs/backlog/dicom-zip-import.md`.
+
+**Built:** nothing; the backlog note, a HANDOFF open item and a line in iteration 1's "Not this iteration".
+
+**Owed by the owner:** the go-ahead, and a real hospital disc to see which compression it uses.
+
+---
+
 ## 2026-10-26 (afternoon) — repo bootstrapped; CT → mesh POC and viewer moved in from the chat
 
 **Asked by the owner:**

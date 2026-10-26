@@ -18,6 +18,7 @@ Read this first. It replaces re-reading any earlier chat.
 
 ## Open items (newest first)
 
+- **Queued, not started:** DICOM zip import in the viewer (in-browser, scan never leaves the customer's machine) — `docs/backlog/dicom-zip-import.md`. Waits for the owner's go.
 - **Iteration 1 is next:** `docs/prompts/iteration-1.md` (ingester restructure + viewer parity with the current crystalproteins.com previews).
 - Confirm the artifact fix on her machine (hard reload; if it still fails, the page now prints the error — get a screenshot into `field/`).
 - Her STL that failed to load: get the file (or its size/source app) into `field/inbox/` so it becomes a test case.

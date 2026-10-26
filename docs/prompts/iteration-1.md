@@ -24,7 +24,7 @@ Here's what happened since last time (2026-10-26 — a Claude app chat built the
 4. **Viewer parity with the current previews:** FRONT / BACK / LEFT / RIGHT / TOP / BOTTOM views (replace the current Front/Side/Top/3-4 set, keep free orbit), the block at the preset size, and a link-friendly mode that opens straight into a given model with no editing panel (for customers). Keep it self-contained (bundled three.js), and keep the startup error display.
 5. **Her STL** (if the owner has put it in `field/inbox/`): load it in the viewer and the ingester; turn whatever breaks into a test with a generated file of the same shape (size, ASCII/binary, units). Never commit the file.
 
-**Not this iteration:** protein styles (cartoon, ball-and-stick…), dot generation beyond the preview, hosting on crystalproteins.com, ordering or billing, TotalSegmentator inside the app (it stays an external step).
+**Not this iteration:** protein styles (cartoon, ball-and-stick…), dot generation beyond the preview, hosting on crystalproteins.com, ordering or billing, TotalSegmentator inside the app (it stays an external step), DICOM zip import in the viewer (queued in `docs/backlog/dicom-zip-import.md`, waits for the owner).
 
 **Ask the owner first:** who uses the ingester (her or customers); what the etcher takes as input; whether previews must keep working inside Sketchfab during the transition; which Block size is current.
 
