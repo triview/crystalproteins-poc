@@ -6,6 +6,16 @@ This file exists because the *reasoning* behind a decision is not reconstructabl
 
 ---
 
+## 2026-10-26 (afternoon, 15:18) — viewer version 3 confirmed working
+
+**Asked by the owner:** "is the link working now?" … "it looks like it's working. i can view and load the stl file that she sent to me"
+
+**Decided:** the startup hang was the runtime CDN module import (or something it depended on); bundling three.js into the page fixed it. Keep the viewer self-contained (already in AGENTS.md).
+
+**Not verified:** her own machine and browser; her STL in the Python ingester.
+
+---
+
 ## 2026-10-26 (afternoon, later) — DICOM zip import queued, not built
 
 **Asked by the owner:** "sounds like it might be easier for the app to accept a dicom zip file" … "that's fine. i'm still learning the process. let's push to later. leave the dicom.zip file processing a process to be completed"

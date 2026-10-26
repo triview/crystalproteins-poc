@@ -13,15 +13,15 @@ Read this first. It replaces re-reading any earlier chat.
   - Tests: 24 pipeline + 20 browser = 44, all green on 2026-10-26 (cloud container, Python 3.13).
   - The 24 pipeline tests also pass on Python 3.10 (the bridge's Linux VM); the 20 browser tests have not run on the Mac yet (iteration 1, step 0).
   - `dist/` (gitignored) already holds a built `viewer_standalone.html`: open it from Finder.
-- **Deployed:** the viewer is published as a claude.ai artifact ("Crystal Etch Preview", shared by link). Version 3 (2026-10-26) bundles three.js into the page after a public viewer hung at "Loading sample model"; not yet confirmed fixed on her machine.
+- **Deployed:** the viewer is published as a claude.ai artifact ("Crystal Etch Preview", shared by link). Version 3 (2026-10-26) bundles three.js into the page after a public viewer hung at "Loading sample model". Confirmed working by the owner on 2026-10-26: the sample loads and her STL opens. Not yet checked on her own machine.
 - **Not in the repo:** `samples/` (gitignored) holds the phantom STL and DICOM zip for manual testing.
 
 ## Open items (newest first)
 
 - **Queued, not started:** DICOM zip import in the viewer (in-browser, scan never leaves the customer's machine) — `docs/backlog/dicom-zip-import.md`. Waits for the owner's go.
 - **Iteration 1 is next:** `docs/prompts/iteration-1.md` (ingester restructure + viewer parity with the current crystalproteins.com previews).
-- Confirm the artifact fix on her machine (hard reload; if it still fails, the page now prints the error — get a screenshot into `field/`).
-- Her STL that failed to load: get the file (or its size/source app) into `field/inbox/` so it becomes a test case.
+- Version 3 works for the owner (sample + her STL). Still to check on her machine with a hard reload; if it fails, the page prints the error — get a screenshot into `field/`.
+- Her STL now loads in version 3. Put a copy in `field/inbox/` (gitignored) so iteration 1 can test the ingester on it and note its size and source app.
 - Current previews on crystalproteins.com appear to be Sketchfab embeds (see `docs/reference/current-viewer.md`); confirm with the owner.
 - No reviewer agents yet; `node scripts/agent-sync.mjs` reports "no agent-body blocks" until the first one is added.
 
