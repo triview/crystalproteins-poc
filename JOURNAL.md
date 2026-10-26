@@ -6,6 +6,20 @@ This file exists because the *reasoning* behind a decision is not reconstructabl
 
 ---
 
+## 2026-10-26 (afternoon, 15:24) — block shapes, model placement and text scoped for iteration 2
+
+**Asked by the owner:** "can you also add the ability to support / different block shapes / reorienting and resizing the 3d object / adding text/font/sizing, orientation, multiple lines, multiple blocks of text"
+
+**Decided (owner):** plan it for a local session (not built in chat); all four shape families (her rectangular sizes, corner cube, round/curved, faceted); text flat or extruded, chosen per text block; curated open-licence fonts plus upload of her own.
+
+**Decided (session, proposed):** one `design.json` (block, placement, layer, text_block — singular names) is the source of truth, exported with every file and readable by `ct2mesh.py --design`; shapes as signed distance functions so fitting works for non-box glass; iteration 1 models the block as a shape definition so iteration 2 slots in. Scope, tests and owner questions in `docs/design/block-placement-text.md`.
+
+**Not verified:** shape catalogue dimensions (not guessed; owed by the owner/etcher); font licences (to verify per font).
+
+**Owed by the owner:** the answers in section 6 of the design doc.
+
+---
+
 ## 2026-10-26 (afternoon, 15:20) — Cloudflare deployment documented
 
 **Asked by the owner:** "what would it take to deploy this on cloudflare?" … "please document the deployment in an operation document."
