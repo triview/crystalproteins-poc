@@ -11,6 +11,8 @@ Read this first. It replaces re-reading any earlier chat.
   - `viewer/`: browser previewer (glass / solid / dots, layer toggles, block size, Z/Y up, hole check, block-fitted STL export). `viewer/index.html` is the shell, `viewer/app.js` the app; `build_viewer.py` bundles three.js into one self-contained page.
   - `make_phantom.py`: synthetic chest CT + masks named like TotalSegmentator output, for tests.
   - Tests: 24 pipeline + 20 browser = 44, all green on 2026-10-26 (cloud container, Python 3.13).
+  - The 24 pipeline tests also pass on Python 3.10 (the bridge's Linux VM); the 20 browser tests have not run on the Mac yet (iteration 1, step 0).
+  - `dist/` (gitignored) already holds a built `viewer_standalone.html`: open it from Finder.
 - **Deployed:** the viewer is published as a claude.ai artifact ("Crystal Etch Preview", shared by link). Version 3 (2026-10-26) bundles three.js into the page after a public viewer hung at "Loading sample model"; not yet confirmed fixed on her machine.
 - **Not in the repo:** `samples/` (gitignored) holds the phantom STL and DICOM zip for manual testing.
 
