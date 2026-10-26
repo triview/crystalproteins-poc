@@ -18,6 +18,7 @@ Read this first. It replaces re-reading any earlier chat.
 
 ## Open items (newest first)
 
+- **Deploy on Cloudflare, documented but not executed:** `docs/operations/deploy-cloudflare.md` (viewer as an assets-only Worker behind Cloudflare Access; the ingester stays off the server for now). Needs the owner's Cloudflare login for the first run.
 - **Queued, not started:** DICOM zip import in the viewer (in-browser, scan never leaves the customer's machine) — `docs/backlog/dicom-zip-import.md`. Waits for the owner's go.
 - **Iteration 1 is next:** `docs/prompts/iteration-1.md` (ingester restructure + viewer parity with the current crystalproteins.com previews).
 - Version 3 works for the owner (sample + her STL). Still to check on her machine with a hard reload; if it fails, the page prints the error — get a screenshot into `field/`.

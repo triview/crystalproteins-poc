@@ -6,6 +6,18 @@ This file exists because the *reasoning* behind a decision is not reconstructabl
 
 ---
 
+## 2026-10-26 (afternoon, 15:20) — Cloudflare deployment documented
+
+**Asked by the owner:** "what would it take to deploy this on cloudflare?" … "please document the deployment in an operation document."
+
+**Decided (session, proposed):** the viewer goes on Cloudflare as a Worker with static assets only, behind Cloudflare Access while it is a POC; the ingester is not deployed (Workers' memory/CPU/body limits); in-browser processing is the recommended path, Containers only if server-side segmentation is wanted. Written up in `docs/operations/deploy-cloudflare.md` with sources.
+
+**Not verified:** nothing was deployed; whether static assets roll back with a Worker version; where crystalproteins.com's DNS lives.
+
+**Owed by the owner:** a session with his Cloudflare login for the first deploy; which domain; when Access comes off for customers.
+
+---
+
 ## 2026-10-26 (afternoon, 15:18) — viewer version 3 confirmed working
 
 **Asked by the owner:** "is the link working now?" … "it looks like it's working. i can view and load the stl file that she sent to me"
